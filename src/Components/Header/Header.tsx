@@ -14,7 +14,9 @@ const Header = () => {
                       className="text-white text-decoration-none">
             Contacts
           </Typography>
-          <Button color="inherit">add new Contact</Button>
+          <NavLink to={'new-contact'} className={'text-white'}>
+            <Button color="inherit">add new Contact</Button>
+          </NavLink>
         </Toolbar>
       </AppBar>
     </Box>
