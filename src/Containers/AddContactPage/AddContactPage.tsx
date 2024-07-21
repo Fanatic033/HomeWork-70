@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {TextField, Button, Box, Container, Typography} from '@mui/material';
 import {useAppDispatch} from '../../hooks/reduxHooks.ts';
-import {fetchContacts} from '../../Slice/ContactSlice.ts';
 import {useNavigate} from 'react-router-dom';
+import {postContacts} from '../../Slice/ContactSlice.ts';
 
 const AddContactPage = () => {
   const [formState, setFormState] = useState({
@@ -32,7 +32,7 @@ const AddContactPage = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(fetchContacts(formState));
+    dispatch(postContacts(formState));
     navigate('/');
   };
 
@@ -85,7 +85,7 @@ const AddContactPage = () => {
             <Typography variant="subtitle1">Image Preview:</Typography>
             <img
               src={formState.previewImage}
-              alt="Preview"
+              alt="Фото отсутствует"
               style={{maxWidth: '100%', height: 'auto', borderRadius: '8px', marginTop: '8px'}}
             />
           </Box>

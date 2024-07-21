@@ -1,7 +1,8 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import axiosApi from '../axiosApi.ts';
 
-interface OneContact {
+export interface OneContact {
+  id: string;
   name: string;
   email: string;
   phone: string;
@@ -20,10 +21,24 @@ export const initialState: ContactsState = {
   isLoading: false,
   error: false,
 };
-
-export const fetchContacts = createAsyncThunk<OneContact[], contactType, {
+export const fetchContacts = createAsyncThunk<OneContact[], void, {
   rejectValue: string
-}>('contacts/fetchContacts', async (contactData, {rejectWithValue}) => {
+}>('contacts/fetchContacts', async (_, {rejectWithValue}) => {
+  try {
+    const {data: contact} = await axiosApi.get('/contacts.json');
+    const contacts: OneContact[] = Object.keys(contact).map((key) => ({
+      ...contact[key],
+      id: key
+    }));
+    return contacts;
+  } catch (e) {
+    return rejectWithValue('Error fetching contacts',);
+  }
+});
+
+export const postContacts = createAsyncThunk<OneContact[], contactType, {
+  rejectValue: string
+}>('contacts/postContacts', async (contactData, {rejectWithValue}) => {
   try {
     const response = await axiosApi.post('/contacts.json', contactData);
     return response.data;
@@ -39,7 +54,23 @@ const contactsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchContacts.pending, (state) => {
+        state.error = false;
         state.isLoading = true;
+
+      })
+      .addCase(fetchContacts.fulfilled, (state, action: PayloadAction<OneContact[]>) => {
+        state.isLoading = false;
+        state.contacts = action.payload;
+      })
+      .addCase(fetchContacts.rejected, (state) => {
+        state.error = true;
+        state.isLoading = false;
+      })
+      .addCase(postContacts.pending, (state) => {
+        state.error = false;
+      })
+      .addCase(postContacts.rejected, (state) => {
+        state.error = true;
       });
   },
 });

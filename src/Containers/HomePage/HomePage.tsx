@@ -1,9 +1,12 @@
+import ContactList from '../../Components/ContactList/ContactList.tsx';
 
 const HomePage = () => {
   return (
-    <div>
-      
-    </div>
+    <>
+      <div className="container">
+        <ContactList/>
+      </div>
+    </>
   );
 };
 
