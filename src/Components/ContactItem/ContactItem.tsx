@@ -3,11 +3,12 @@ import {FC} from 'react';
 
 interface Props {
   contact: OneContact;
+  openModal: (contact: OneContact) => void;
 }
 
-const ContactItem: FC<Props> = ({contact}) => {
+const ContactItem: FC<Props> = ({contact,openModal}) => {
   return (
-    <div className="card mb-4 mt-4 w-50" onClick={() => console.log('hi')}>
+    <div className="card mb-4 mt-4 w-50" onClick={() => openModal(contact)}>
       <div className="d-flex align-items-center">
         <img src={contact.image} className="card-img-left" alt="img" style={{width: '140px', marginRight: '20px'}}/>
         <div className="card-body">
