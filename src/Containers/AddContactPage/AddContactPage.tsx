@@ -1,10 +1,13 @@
 import React, {useState} from 'react';
 import {TextField, Button, Box, Container, Typography} from '@mui/material';
-import {useAppDispatch} from '../../hooks/reduxHooks.ts';
+import {useAppDispatch, useAppSelector} from '../../hooks/reduxHooks.ts';
 import {useNavigate} from 'react-router-dom';
 import {postContacts} from '../../Slice/ContactSlice.ts';
+import {RootState} from '../../store/store.ts';
+import ButtonSpinner from '../../Components/Spinner/ButtonSpinner.tsx';
 
 const AddContactPage = () => {
+  const isLoading = useAppSelector((state: RootState) => state.contacts.isLoading);
   const [formState, setFormState] = useState({
     name: '',
     phone: '',
@@ -77,9 +80,11 @@ const AddContactPage = () => {
           onChange={handleChange}
           margin="normal"
         />
-        <Button type="submit" variant="contained" color="primary" sx={{mt: 3}} className={'mb-5'}>
+        <Button type="submit" variant="contained" color="primary" sx={{mt: 3}} className={'mb-5'} disabled={isLoading}>
+          {isLoading && <ButtonSpinner/>}
           Save
         </Button>
+
         {formState.previewImage && (
           <Box sx={{mt: 2, textAlign: 'center'}}>
             <Typography variant="subtitle1">Image Preview:</Typography>

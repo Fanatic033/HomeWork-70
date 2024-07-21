@@ -2,10 +2,14 @@ import ContactList from '../../Components/ContactList/ContactList.tsx';
 import {useState} from 'react';
 import Modal from '../../Components/Modal/Modal.tsx';
 import {OneContact} from '../../Slice/ContactSlice.ts';
+import {useAppSelector} from '../../hooks/reduxHooks.ts';
+import {RootState} from '../../store/store.ts';
+import Spinner from '../../Components/Spinner/Spinner.tsx';
 
 const HomePage = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedContact, setSelectedContact] = useState<OneContact | null>(null);
+  const isLoading = useAppSelector((state: RootState) => state.contacts.isLoading);
 
   const openModal = (contact: OneContact) => {
     setShowModal(true);
@@ -19,6 +23,7 @@ const HomePage = () => {
     <>
       <div className="container">
         <ContactList openModal={openModal}/>
+        {isLoading && <div className={'d-flex justify-content-center align-items-center mt-5'}><Spinner/></div>}
         {showModal && selectedContact && (
           <Modal title={'Details'} onClose={closeModal} show={showModal}>
             <div className="d-flex flex-row align-items-center">

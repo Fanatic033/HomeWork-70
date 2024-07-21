@@ -66,12 +66,15 @@ const contactsSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(postContacts.pending, (state) => {
+        state.isLoading = true;
         state.error = false;
       })
       .addCase(postContacts.fulfilled, (state, action: PayloadAction<OneContact>) => {
+        state.isLoading = false;
         state.contacts.push(action.payload);
       })
       .addCase(postContacts.rejected, (state) => {
+        state.isLoading = false;
         state.error = true;
       });
   },
