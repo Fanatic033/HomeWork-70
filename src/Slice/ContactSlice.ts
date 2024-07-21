@@ -2,7 +2,6 @@ import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import axiosApi from '../axiosApi.ts';
 
 export interface OneContact {
-  id: string;
   name: string;
   email: string;
   phone: string;
@@ -10,7 +9,7 @@ export interface OneContact {
   previewImage: string;
 }
 
-interface ContactsState {
+export interface ContactsState {
   contacts: OneContact[];
   error: boolean;
   isLoading: boolean;
@@ -36,7 +35,7 @@ export const fetchContacts = createAsyncThunk<OneContact[], void, {
   }
 });
 
-export const postContacts = createAsyncThunk<OneContact[], contactType, {
+export const postContacts = createAsyncThunk<OneContact, contactType, {
   rejectValue: string
 }>('contacts/postContacts', async (contactData, {rejectWithValue}) => {
   try {
@@ -68,6 +67,9 @@ const contactsSlice = createSlice({
       })
       .addCase(postContacts.pending, (state) => {
         state.error = false;
+      })
+      .addCase(postContacts.fulfilled, (state, action: PayloadAction<OneContact>) => {
+        state.contacts.push(action.payload);
       })
       .addCase(postContacts.rejected, (state) => {
         state.error = true;

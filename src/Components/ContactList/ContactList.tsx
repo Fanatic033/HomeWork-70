@@ -15,7 +15,7 @@ const ContactList = () => {
     <div>
       <h3 className={'mt-4'}>Contacts List</h3>
       {Contacts.map((contact: OneContact) => (
-        <ContactItem contact={contact} key={contact.id}/>
+        <ContactItem contact={contact} key={contact.name}/>
       ))}
     </div>
   );
