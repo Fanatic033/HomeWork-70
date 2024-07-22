@@ -14,7 +14,7 @@ const ContactList: FC<Props> = ({openModal}) => {
 
   useEffect(() => {
     dispatch(fetchContacts());
-  }, [dispatch]);
+  }, [dispatch,]);
   return (
     <div>
       <h3 className={'mt-4'}>Contacts List</h3>

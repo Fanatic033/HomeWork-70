@@ -1,15 +1,17 @@
 import ContactList from '../../Components/ContactList/ContactList.tsx';
 import {useState} from 'react';
 import Modal from '../../Components/Modal/Modal.tsx';
-import {OneContact} from '../../Slice/ContactSlice.ts';
-import {useAppSelector} from '../../hooks/reduxHooks.ts';
+import {deleteContact, OneContact} from '../../Slice/ContactSlice.ts';
+import {useAppDispatch, useAppSelector} from '../../hooks/reduxHooks.ts';
 import {RootState} from '../../store/store.ts';
 import Spinner from '../../Components/Spinner/Spinner.tsx';
+import {Link} from 'react-router-dom';
 
 const HomePage = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedContact, setSelectedContact] = useState<OneContact | null>(null);
   const isLoading = useAppSelector((state: RootState) => state.contacts.isLoading);
+  const dispatch = useAppDispatch();
 
   const openModal = (contact: OneContact) => {
     setShowModal(true);
@@ -18,6 +20,13 @@ const HomePage = () => {
   const closeModal = () => {
     setShowModal(false);
     setSelectedContact(null);
+  };
+
+  const onDelete = () => {
+    if (selectedContact) {
+      dispatch(deleteContact(selectedContact.id));
+      setShowModal(false);
+    }
   };
   return (
     <>
@@ -39,8 +48,10 @@ const HomePage = () => {
             </div>
             <hr/>
             <div className="mt-3 text-center mb-3">
-              <button type={'button'} className={'btn btn-warning  mx-3'}>Edit</button>
-              <button type={'button'} className={'btn btn-danger mx-3'}>Delete</button>
+              <Link to={`/edit-contact/${selectedContact.id}`}>
+                <button type={'button'} className={'btn btn-warning  mx-3'}>Edit</button>
+              </Link>
+              <button type={'button'} className={'btn btn-danger mx-3'} onClick={onDelete}>Delete</button>
             </div>
           </Modal>
         )}
